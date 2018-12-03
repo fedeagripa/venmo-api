@@ -18,6 +18,7 @@
 
 class Payment < ApplicationRecord
   validate :ensure_receiver_is_friend
+  validates :amount, inclusion: { in: 1..1000, message: 'Amount should be between 1 & 1000' }
 
   belongs_to :user
   belongs_to :receiver, class_name: User.to_s, foreign_key: 'receiver_id'
