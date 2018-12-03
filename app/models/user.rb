@@ -47,6 +47,7 @@ class User < ApplicationRecord
             source: :user, dependent: :destroy
   has_many :friends_added_me, through: :friends_user, class_name: User.to_s,
             source: :friend, dependent: :destroy
+  has_many :payments
 
   def full_name
     return username unless first_name.present?
@@ -54,7 +55,7 @@ class User < ApplicationRecord
   end
 
   def friends
-    UserFriend.where(user_friend_id: id).or(UserFriend.where(user_me_id: id))
+    UserFriend.where(user_friend_id: id).or(UserFriend.where(user_me_id: id)).map(&:friend)
   end
 
   def self.from_social_provider(provider, user_params)
@@ -62,6 +63,14 @@ class User < ApplicationRecord
       user.password = Devise.friendly_token[0, 20]
       user.assign_attributes user_params.except('id')
     end
+  end
+
+  def send_money(amount)
+    decrement!(:balance, amount)
+  end
+
+  def add_to_balance(amount)
+    increment!(:balance, amount)
   end
 
   private

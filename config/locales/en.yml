@@ -26,3 +26,10 @@ en:
       not_found: "Couldn't find the record"
       missing_param: 'A required param is missing'
       invalid_content_type: 'Invalid content type header'
+  activerecord:
+    errors:
+      models:
+        payment:
+          attributes:
+            receiver_id:
+              not_friends: "Users must be friends"

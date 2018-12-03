@@ -16,6 +16,13 @@ module Api
         render :show
       end
 
+      def payment
+        receiver = User.find(params[:friend_id])
+        Payment.create!(user: user, receiver: receiver, amount: params[:amount], description: params[:description])
+        MoneyTransferService.new(user, receiver).transfer(params[:amount])
+        head :ok
+      end
+
       private
 
       def user_params
