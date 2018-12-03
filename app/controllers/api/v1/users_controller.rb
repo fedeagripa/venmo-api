@@ -16,6 +16,10 @@ module Api
         render :show
       end
 
+      def balance
+        render json: { balance: user.balance }
+      end
+
       def payment
         receiver = User.find(params[:friend_id])
         Payment.create!(user: user, receiver: receiver, amount: params[:amount], description: params[:description])

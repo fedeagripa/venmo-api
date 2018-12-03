@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         get :status, to: 'api#status'
         resources :users, only: :show do
           member do
+            get :balance
             post :payment
           end
         end
