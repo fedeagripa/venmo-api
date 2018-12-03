@@ -7,8 +7,9 @@
 #  encrypted_password     :string           default(""), not null
 #  reset_password_token   :string
 #  reset_password_sent_at :datetime
+#  allow_password_change  :boolean          default(FALSE)
 #  remember_created_at    :datetime
-#  sign_in_count          :integer          default("0"), not null
+#  sign_in_count          :integer          default(0), not null
 #  current_sign_in_at     :datetime
 #  last_sign_in_at        :datetime
 #  current_sign_in_ip     :inet
@@ -40,9 +41,20 @@ class User < ApplicationRecord
 
   before_validation :init_uid
 
+  has_many :user_friends, foreign_key: 'user_me_id'
+  has_many :friends_user, foreign_key: 'user_friend_id', class_name: UserFriend.to_s
+  has_many :friends_added, through: :user_friends, class_name: User.to_s,
+            source: :user, dependent: :destroy
+  has_many :friends_added_me, through: :friends_user, class_name: User.to_s,
+            source: :friend, dependent: :destroy
+
   def full_name
     return username unless first_name.present?
     "#{first_name} #{last_name}"
+  end
+
+  def friends
+    UserFriend.where(user_friend_id: id).or(UserFriend.where(user_me_id: id))
   end
 
   def self.from_social_provider(provider, user_params)
