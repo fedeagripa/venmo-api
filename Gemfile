@@ -22,6 +22,7 @@ gem 'puma', '~> 3.0'
 gem 'rack-cors', '~> 0.4.0'
 gem 'sendgrid', '~> 1.2.4'
 gem 'tilt', '~> 2.0.7'
+gem 'kaminari', '~> 1.1.1'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password

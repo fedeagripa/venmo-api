@@ -20,6 +20,11 @@ module Api
         render json: { balance: user.balance }
       end
 
+      def feed
+        @payments = Kaminari.paginate_array(user.friends.map(&:payments)).page(pagination).per(5)
+        render json: { payments: @payments }
+      end
+
       def payment
         receiver = User.find(params[:friend_id])
         Payment.create!(user: user, receiver: receiver, amount: params[:amount], description: params[:description])
@@ -39,6 +44,10 @@ module Api
 
       def user_id
         params[:id]
+      end
+
+      def pagination
+        params[:page] || 1
       end
     end
   end
