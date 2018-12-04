@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20181203192955) do
   end
 
   create_table "payments", force: :cascade do |t|
-    t.integer "amount", null: false
+    t.integer "amount", default: 0, null: false
     t.text "description"
     t.bigint "user_id"
     t.bigint "receiver_id"

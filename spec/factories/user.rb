@@ -4,5 +4,6 @@ FactoryBot.define do
     password { Faker::Internet.password(8) }
     username { Faker::Internet.unique.user_name }
     uid      { Faker::Number.unique.number(10) }
+    balance  { Faker::Number.unique.number(3) }
   end
 end
