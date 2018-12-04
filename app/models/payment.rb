@@ -23,6 +23,10 @@ class Payment < ApplicationRecord
   belongs_to :user
   belongs_to :receiver, class_name: User.to_s, foreign_key: 'receiver_id'
 
+  def title
+    "#{user.full_name} paid #{receiver.full_name} on #{created_at} regarding: #{description}"
+  end
+
   private
 
   def ensure_receiver_is_friend

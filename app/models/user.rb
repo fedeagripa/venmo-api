@@ -66,10 +66,15 @@ class User < ApplicationRecord
   end
 
   def send_money(amount)
+    transfer_from_bank(amount-balance) if balance < amount
     decrement!(:balance, amount)
   end
 
   def add_to_balance(amount)
+    increment!(:balance, amount)
+  end
+
+  def transfer_from_bank(amount)
     increment!(:balance, amount)
   end
 

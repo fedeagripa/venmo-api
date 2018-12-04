@@ -21,12 +21,12 @@ module Api
       end
 
       def feed
-        @payments = Kaminari.paginate_array(user.friends.map(&:payments)).page(pagination).per(5)
-        render json: { payments: @payments }
+        payments = Payment.where(user: user).or(Payment.where(receiver: user))
+        @payments = payments.order(created_at: :desc).page(pagination).per(10)
       end
 
       def payment
-        receiver = User.find(params[:friend_id])
+        receiver = User.find(friend_id)
         Payment.create!(user: user, receiver: receiver, amount: params[:amount], description: params[:description])
         MoneyTransferService.new(user, receiver).transfer(params[:amount])
         head :ok
@@ -44,6 +44,10 @@ module Api
 
       def user_id
         params[:id]
+      end
+
+      def friend_id
+        params[:friend_id]
       end
 
       def pagination
